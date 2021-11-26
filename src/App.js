@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Routes ,Route } from 'react-router-dom';
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
 
-function App() {
+
+import Nav from "./nav/Nav";
+import Table from "./Table/Table";
+import AddPage from "./addPage/Testpage";
+import Edit from "./editPage/EditPage";
+
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+    <div className="md:ml-64">
+    <Nav />
+      <Routes >
+      <Route path='/' element={<Table/>} />
+      <Route path='/addpage' element={<AddPage/>} />
+      <Route path="/Edit-todo/:id" exact element={ <Edit/> } />
+      </Routes>
     </div>
+  </>
   );
 }
-
-export default App;
