@@ -4,8 +4,7 @@ import "mdb-react-ui-kit/dist/css/mdb.min.css";
 
 import Nav from "./nav/Nav";
 import Table from "./Table/Table";
-import AddPage from "./addPage/Testpage";
-import Page from "./addPage/Addpage";
+import AddPage from "./addPage/Addpage";
 import Edit from "./editPage/EditPage";
 
 export default function App() {
@@ -15,8 +14,7 @@ export default function App() {
         <Nav />
         <Routes>
           <Route path="/" element={<Table />} />
-          <Route path="/addpage" element={<AddPage />} />
-          <Route path="/add-page" element={<Page />} />
+          <Route path="/add-page" element={<AddPage />} />
           <Route path="/Edit-todo/:id" exact element={<Edit />} />
         </Routes>
       </div>

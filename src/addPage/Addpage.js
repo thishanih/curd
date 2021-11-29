@@ -1,60 +1,105 @@
-import React from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCardImage, MDBBtn, MDBBadge } from 'mdb-react-ui-kit';
+import React, { Component } from 'react'
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
-export default function Addpage() {
-  const validationSchema = yup.object({
-    email: yup
-      .string("Enter your email")
-      .email("Enter a valid email")
-      .required("Email is required"),
-    password: yup
-      .string("Enter your password")
-      .min(8, "Password should be of minimum 8 characters length")
-      .required("Password is required"),
-  });
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment'
 
-  const formik = useFormik({
-    initialValues: {
-      email: "foobar@example.com",
-      password: "foobar",
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
+export default class Addpage extends Component {
+
+  state = {
+    startDate: new Date()
+  };
+
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange = date => {
+    var date = moment(date).format('L');
+    console.log("🚀 ~ file: Addpage.js ~ line 23 ~ Addpage ~ date", date)
+    this.setState({
+      startDate: date
+    });
+  };
+
+  validationSchema() {
+    return Yup.object().shape({
+      addTo: Yup.string()
+        .required('Add Todo is required')
+        .min(6, 'Add Todo must be at least 6 characters')
+        .max(20, 'Add Todo must not exceed 20 characters'),
+
+      startDate: Yup.string()
+        .required('Add startDate is required'),
+    });
+  }
+
+  handleSubmit(data) {
+    console.log(JSON.stringify(data, null, 2));
+  }
 
 
-  return (
-    <div>
-      <form onSubmit={formik.handleSubmit}>
-        <MDBInput
-          fullWidth
-          id="email"
-          name="email"
-          label="Email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
-        <MDBInput
-          fullWidth
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-        <MDBBtn color="primary" variant="contained" fullWidth type="submit">
-          Submit
-        </MDBBtn>
-      </form>
-    </div>
-  );
+  render() {
+    const initialValues = {
+      addTo: '',
+      startDate: '',
+
+    };
+    return (
+      <div>
+        <div className="register-form">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={this.validationSchema}
+            onSubmit={this.handleSubmit}
+          >
+            {({ resetForm }) => (
+              <Form>
+                <div className="form-group">
+                  <label>Add Todo</label>
+                  <Field name="addTo" type="text" className="form-control" />
+                  <ErrorMessage
+                    name="addTo"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Add Time</label>
+                  <DatePicker
+                    name="startDate"
+                    selected={this.state.startDate}
+                    onChange={this.handleChange}
+                  />
+                  <ErrorMessage
+                    name="startDate"
+                    component="div"
+                    className="text-danger"
+                  />
+                </div>
+
+
+                <div className="form-group">
+                  <button type="submit" className="btn btn-primary">
+                    Register
+                  </button>
+                  <button
+                    type="button"
+                    onClick={resetForm}
+                    className="btn btn-warning float-right"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
+    )
+  }
 }

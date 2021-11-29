@@ -21,7 +21,7 @@ export default function EditPage() {
 
   const [editTodo, SetEditTodo] = useState();
   const [editStatus, SetEditStatus] = useState();
-  //   const [editTime, SetEditTime] = useState();
+
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState();
@@ -34,12 +34,11 @@ export default function EditPage() {
     SetEditTodo(e.target.value);
   };
 
-
   const onEditTodoStatus = (e) => {
-
     SetEditStatus(e.target.value);
   };
 
+  // data show
 
   const getTodoId = async () => {
     await axios
@@ -54,6 +53,9 @@ export default function EditPage() {
         console.log("🚀 ~ file: EditPage.js ~ line 46 ~ .then ~ response.data.status", response.data.status)
       });
   };
+
+
+  // edit Submit
 
   const onSubmit = async () => {
     await axios
@@ -102,6 +104,7 @@ export default function EditPage() {
               <MDBCol size='12' >
                 <select onChange={onEditTodoStatus} className="form-select margin-t" aria-label="Default select example">
                   <option value={editStatus}> {editStatus}</option>
+                  <option value="Noted">Noted</option>
                   <option value="Pendding">Pendding</option>
                   <option value="Complete">Complete</option>
                 </select>

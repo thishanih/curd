@@ -13,6 +13,8 @@ import {
 export default function Table() {
   const [todo, setTodo] = useState([]);
 
+
+// All Data Show
   const getTodo = async () => {
     await axios
       .request({
@@ -31,12 +33,12 @@ export default function Table() {
     setTodo(newtoDo);
   };
 
+// Get Id
   const getTodoId = async (id) => {
     await axios.request({
       method: "get",
       url: "http://localhost:5000/todo/" + id,
     });
-    // console.log(id);
   };
 
   useEffect(() => {

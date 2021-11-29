@@ -13,7 +13,7 @@ export default function Nav() {
                 <MDBContainer >
                     <a href="/"  className='navbar-brand'>Navbar</a>
                     <form className='d-flex input-group w-auto'>
-                        <MDBBtn href="/addpage" color='primary'>Add Value</MDBBtn>
+                        <MDBBtn href="/add-page" color='primary'>Add Value</MDBBtn>
                     </form>
                 </MDBContainer>
             </MDBNavbar>
