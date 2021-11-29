@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React, { Component } from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment'
+import moment from "moment";
 
 export default class Addpage extends Component {
-
   state = {
-    startDate: new Date()
+    startDate: "",
   };
 
   constructor(props) {
@@ -17,36 +16,37 @@ export default class Addpage extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = date => {
-    this.setState({
-      startDate: date
-    });
-  };
+  // handleChange = (date) => {
+  //   this.setState({
+  //     startDate: date,
+  //   });
+  // };
 
   validationSchema() {
     return Yup.object().shape({
       addTo: Yup.string()
-        .required('Add Todo is required')
-        .min(6, 'Add Todo must be at least 6 characters')
-        .max(20, 'Add Todo must not exceed 20 characters'),
+        .required("Add Todo is required")
+        .min(6, "Add Todo must be at least 6 characters")
+        .max(20, "Add Todo must not exceed 20 characters"),
 
-      startDate: Yup.string()
-        .required('Add startDate is required'),
+      startDate: Yup.string().required("Add startDate is required"),
     });
   }
 
   handleSubmit(data) {
-    
-    console.log(JSON.stringify(data, null, 2));
-    console.log("🚀 ~ file: Addpage.js ~ line 42 ~ Addpage ~ handleSubmit ~ data", data)
-  }
+    // console.log(JSON.stringify(data, null, 2));
 
+    console.log(
+      "🚀 ~ file: Addpage.js ~ line 42 ~ Addpage ~ handleSubmit ~ data",
+      moment(data.startDate).format("L")
+    );
+  }
 
   render() {
     const initialValues = {
-      addTo: '',
-      startDate: ''
-
+      addTo: "",
+      // startDate: moment(this.state.startDate).format("L"),
+      startDate: "",
     };
     return (
       <div>
@@ -56,7 +56,7 @@ export default class Addpage extends Component {
             validationSchema={this.validationSchema}
             onSubmit={this.handleSubmit}
           >
-            {({ resetForm }) => (
+            {({ resetForm, values, setFieldValue }) => (
               <Form>
                 <div className="form-group">
                   <label>Add Todo</label>
@@ -72,8 +72,9 @@ export default class Addpage extends Component {
                   <label>Add Time</label>
                   <DatePicker
                     name="startDate"
-                    selected={this.state.startDate}
-                    onChange={this.handleChange}
+                    value={values.startDate}
+                    selected={values.startDate}
+                    onChange={(date) => setFieldValue("startDate", date)}
                   />
                   <ErrorMessage
                     name="startDate"
@@ -81,7 +82,6 @@ export default class Addpage extends Component {
                     className="text-danger"
                   />
                 </div>
-
 
                 <div className="form-group">
                   <button type="submit" className="btn btn-primary">
@@ -100,6 +100,6 @@ export default class Addpage extends Component {
           </Formik>
         </div>
       </div>
-    )
+    );
   }
 }
