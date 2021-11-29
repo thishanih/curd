@@ -18,7 +18,12 @@ export default function Table() {
 
   const handleChange = event => {
     setSearchTerm(event.target.value);
-    console.log("🚀 ~ file: Table.js ~ line 21 ~ Table ~ event.target.value", event.target.value)
+
+    const results = todo.filter(todo =>
+      todo.todoTitle.toLowerCase().includes(searchTerm)
+    );
+    setTodo(results);
+    console.log("🚀 ~ file: Table.js ~ line 21 ~ Table ~ event.target.value",results)
   };
 
 
@@ -53,19 +58,8 @@ export default function Table() {
 
   useEffect(() => {
 
-    const results = todo.filter(person =>
-      person.toLowerCase().includes(searchTerm)
-  );
-  setSearchResults(results);
-
     getTodo();
-  }, [searchTerm]);
-
-
-
-
-
-
+  }, []);
 
   return (
     <MDBContainer>
@@ -84,7 +78,7 @@ export default function Table() {
             </tr>
           </MDBTableHead>
           <MDBTableBody>
-            {searchResults.map((toDo, key) => (
+            {todo.map((toDo, key) => (
               <tr key={toDo._id}>
                 <th scope="row">{toDo.todoTitle}</th>
                 <td>{toDo.dates}</td>
