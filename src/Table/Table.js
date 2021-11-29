@@ -8,13 +8,22 @@ import {
   MDBTableBody,
   MDBBtn,
   MDBIcon,
+  MDBInput,
 } from "mdb-react-ui-kit";
 
 export default function Table() {
   const [todo, setTodo] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleChange = event => {
+    setSearchTerm(event.target.value);
+    console.log("🚀 ~ file: Table.js ~ line 21 ~ Table ~ event.target.value", event.target.value)
+  };
 
 
-// All Data Show
+
+  // All Data Show
   const getTodo = async () => {
     await axios
       .request({
@@ -26,6 +35,7 @@ export default function Table() {
       });
   };
 
+
   //  Delect post
   const deleteFunc = async (id) => {
     await axios.delete("http://localhost:5000/todo/delectTodo/" + id);
@@ -33,7 +43,7 @@ export default function Table() {
     setTodo(newtoDo);
   };
 
-// Get Id
+  // Get Id
   const getTodoId = async (id) => {
     await axios.request({
       method: "get",
@@ -42,61 +52,77 @@ export default function Table() {
   };
 
   useEffect(() => {
+
+    const results = todo.filter(person =>
+      person.toLowerCase().includes(searchTerm)
+  );
+  setSearchResults(results);
+
     getTodo();
-  }, []);
+  }, [searchTerm]);
+
+
+
+
+
+
 
   return (
     <MDBContainer>
-      <div className="table-responsive">
-      <MDBTable>
-        <MDBTableHead>
-          <tr>
-            <th scope="col">Todo</th>
-            <th scope="col">Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-          </tr>
-        </MDBTableHead>
-        <MDBTableBody>
-          {todo.map((toDo, key) => (
-            <tr key={toDo._id}>
-              <th scope="row">{toDo.todoTitle}</th>
-              <td>{toDo.dates}</td>
-              <td>{toDo.status}</td>
-              <td>
-                <MDBBtn
-                  tag="a"
-                  color="none"
-                  onClick={() => deleteFunc(toDo._id)}
-                  className="m-1 p-2"
-                  style={{ color: "#FF0000" }}
-                >
-                  <MDBIcon fas icon="trash" size="lg" />
-                </MDBBtn>
 
-                <Link
-                  to={{
-                    pathname: `/Edit-todo/${toDo._id}`,
-                    data: toDo._id,
-                  }}
-                >
+
+      <MDBInput value={searchTerm} onChange={handleChange} label='Example label' id='form1' type='text' />
+
+      <div className="table-responsive">
+        <MDBTable>
+          <MDBTableHead>
+            <tr>
+              <th scope="col">Todo</th>
+              <th scope="col">Date</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </MDBTableHead>
+          <MDBTableBody>
+            {searchResults.map((toDo, key) => (
+              <tr key={toDo._id}>
+                <th scope="row">{toDo.todoTitle}</th>
+                <td>{toDo.dates}</td>
+                <td>{toDo.status}</td>
+                <td>
                   <MDBBtn
                     tag="a"
-                    onClick={() => {
-                      getTodoId(toDo._id);
-                    }}
                     color="none"
+                    onClick={() => deleteFunc(toDo._id)}
                     className="m-1 p-2"
-                    style={{ color: "#55acee" }}
+                    style={{ color: "#FF0000" }}
                   >
-                    <MDBIcon fas icon="edit" size="lg" />
+                    <MDBIcon fas icon="trash" size="lg" />
                   </MDBBtn>
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </MDBTableBody>
-      </MDBTable>
+
+                  <Link
+                    to={{
+                      pathname: `/Edit-todo/${toDo._id}`,
+                      data: toDo._id,
+                    }}
+                  >
+                    <MDBBtn
+                      tag="a"
+                      onClick={() => {
+                        getTodoId(toDo._id);
+                      }}
+                      color="none"
+                      className="m-1 p-2"
+                      style={{ color: "#55acee" }}
+                    >
+                      <MDBIcon fas icon="edit" size="lg" />
+                    </MDBBtn>
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </MDBTableBody>
+        </MDBTable>
       </div>
     </MDBContainer>
   );

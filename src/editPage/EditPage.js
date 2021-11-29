@@ -102,8 +102,7 @@ export default function EditPage() {
 
 
               <MDBCol size='12' >
-                <select onChange={onEditTodoStatus} className="form-select margin-t" aria-label="Default select example">
-                  <option value={editStatus}> {editStatus}</option>
+                <select value={editStatus} onChange={onEditTodoStatus} className="form-select margin-t" aria-label="Default select example">
                   <option value="Noted">Noted</option>
                   <option value="Pendding">Pendding</option>
                   <option value="Complete">Complete</option>

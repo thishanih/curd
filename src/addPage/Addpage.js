@@ -18,8 +18,6 @@ export default class Addpage extends Component {
   }
 
   handleChange = date => {
-    var date = moment(date).format('L');
-    console.log("🚀 ~ file: Addpage.js ~ line 23 ~ Addpage ~ date", date)
     this.setState({
       startDate: date
     });
@@ -38,14 +36,16 @@ export default class Addpage extends Component {
   }
 
   handleSubmit(data) {
+    
     console.log(JSON.stringify(data, null, 2));
+    console.log("🚀 ~ file: Addpage.js ~ line 42 ~ Addpage ~ handleSubmit ~ data", data)
   }
 
 
   render() {
     const initialValues = {
       addTo: '',
-      startDate: '',
+      startDate: ''
 
     };
     return (
