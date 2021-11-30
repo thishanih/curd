@@ -14,19 +14,22 @@ import {
 export default function Table() {
   const [todo, setTodo] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
 
-  const handleChange = event => {
+  const handleChange = (event) => {
+    if (event.target.value == "") {
+      getTodo();
+    }
     setSearchTerm(event.target.value);
 
-    const results = todo.filter(todo =>
+    const results = todo.filter((todo) =>
       todo.todoTitle.toLowerCase().includes(searchTerm)
     );
     setTodo(results);
-    console.log("🚀 ~ file: Table.js ~ line 21 ~ Table ~ event.target.value",results)
+    console.log(
+      "🚀 ~ file: Table.js ~ line 21 ~ Table ~ event.target.value",
+      results
+    );
   };
-
-
 
   // All Data Show
   const getTodo = async () => {
@@ -39,7 +42,6 @@ export default function Table() {
         setTodo(response.data);
       });
   };
-
 
   //  Delect post
   const deleteFunc = async (id) => {
@@ -57,15 +59,18 @@ export default function Table() {
   };
 
   useEffect(() => {
-
     getTodo();
   }, []);
 
   return (
     <MDBContainer>
-
-
-      <MDBInput value={searchTerm} onChange={handleChange} label='Example label' id='form1' type='text' />
+      <MDBInput
+        value={searchTerm}
+        onChange={handleChange}
+        label="Example label"
+        id="form1"
+        type="text"
+      />
 
       <div className="table-responsive">
         <MDBTable>
