@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
+import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+
+
+import "../assets/style.css";
+import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCardImage, MDBBtn, MDBBadge } from 'mdb-react-ui-kit';
+
 
 export default class Addpage extends Component {
   state = {
@@ -16,90 +21,104 @@ export default class Addpage extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // handleChange = (date) => {
-  //   this.setState({
-  //     startDate: date,
-  //   });
-  // };
 
   validationSchema() {
     return Yup.object().shape({
       addTo: Yup.string()
         .required("Add Todo is required")
-        .min(6, "Add Todo must be at least 6 characters")
-        .max(20, "Add Todo must not exceed 20 characters"),
+        .min(10, "Add Todo must be at least 10 characters")
+        .max(100, "Add Todo must not exceed 100 characters"),
 
-      startDate: Yup.string().required("Add startDate is required"),
+      startDate: Yup.string().required("Add To startDate is required"),
     });
   }
 
-  handleSubmit(data) {
-    // console.log(JSON.stringify(data, null, 2));
 
-    console.log(
-      "🚀 ~ file: Addpage.js ~ line 42 ~ Addpage ~ handleSubmit ~ data",
-      moment(data.startDate).format("L")
-    );
+  async handleSubmit(data) {
+
+    await axios
+      .post("http://localhost:5000/todo/addTodo/", {
+        todoTitle: data.addTo,
+        dates: moment(data.startDate).format("L"),
+      })
+      .then((response) => {
+        console.log("🚀 ~ file: Addpage.js ~ line 44 ~ Addpage ~ .then ~ response", response)
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {
     const initialValues = {
       addTo: "",
-      // startDate: moment(this.state.startDate).format("L"),
       startDate: "",
     };
     return (
-      <div>
-        <div className="register-form">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={this.validationSchema}
-            onSubmit={this.handleSubmit}
-          >
-            {({ resetForm, values, setFieldValue }) => (
-              <Form>
-                <div className="form-group">
-                  <label>Add Todo</label>
-                  <Field name="addTo" type="text" className="form-control" />
-                  <ErrorMessage
-                    name="addTo"
-                    component="div"
-                    className="text-danger"
-                  />
-                </div>
+      <MDBContainer>
+        <MDBRow className="text-center margin-t-100">
+          <MDBCol lg="8" sm="10" size='12' className='col-example'>
+            <MDBCardImage src='https://mdbcdn.b-cdn.net/img/new/standard/nature/182.jpg' className="img-fluid" alt='...' />
+          </MDBCol>
 
-                <div className="form-group">
-                  <label>Add Time</label>
-                  <DatePicker
-                    name="startDate"
-                    value={values.startDate}
-                    selected={values.startDate}
-                    onChange={(date) => setFieldValue("startDate", date)}
-                  />
-                  <ErrorMessage
-                    name="startDate"
-                    component="div"
-                    className="text-danger"
-                  />
-                </div>
+          <MDBCol lg="4" sm="10" size='12' className='d-flex align-items-center justify-content-center'>
 
-                <div className="form-group">
-                  <button type="submit" className="btn btn-primary">
-                    Register
-                  </button>
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="btn btn-warning float-right"
-                  >
-                    Reset
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </div>
+            <MDBRow>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={this.validationSchema}
+                onSubmit={this.handleSubmit}
+              >
+                {({ resetForm, values, setFieldValue }) => (
+                  <Form>
+                    <MDBCol size='12'  >
+                      <label>Add Todo</label>
+                      <Field name="addTo" type="text" className="form-control" />
+                      {/* <MDBInput name="addTo" label='Todo Title' id='typeText' type='text' /> */}
+
+                      <ErrorMessage
+                        name="addTo"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </MDBCol>
+
+                    <MDBCol size='12'  >
+                      <label>Add Time</label>
+                      <DatePicker
+                        name="startDate"
+                        value={values.startDate}
+                        selected={values.startDate}
+                        onChange={(date) => setFieldValue("startDate", date)}
+                      />
+                      <ErrorMessage
+                        name="startDate"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </MDBCol>
+
+
+                    <MDBCol size='12 padding-tb'  >
+                      <button type="submit" className="btn btn-primary">
+                        Add Todo
+                      </button>
+                      <button
+                        type="button"
+                        onClick={resetForm}
+                        className="btn btn-warning float-right"
+                      >
+                        Reset
+                      </button>
+                    </MDBCol>
+                  </Form>
+                )}
+              </Formik>
+            </MDBRow>
+          </MDBCol>
+        </MDBRow>
+      </MDBContainer>
     );
   }
 }

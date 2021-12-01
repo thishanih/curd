@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "../assets/style.css";
 import { Link } from "react-router-dom";
 import {
   MDBContainer,
@@ -9,21 +10,25 @@ import {
   MDBBtn,
   MDBIcon,
   MDBInput,
+  MDBRow, MDBCol,
 } from "mdb-react-ui-kit";
 
 export default function Table() {
   const [todo, setTodo] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
 
   const handleChange = event => {
+
+    if (event.target.value == "") {
+      getTodo();
+    }
     setSearchTerm(event.target.value);
 
     const results = todo.filter(todo =>
       todo.todoTitle.toLowerCase().includes(searchTerm)
     );
     setTodo(results);
-    console.log("🚀 ~ file: Table.js ~ line 21 ~ Table ~ event.target.value",results)
+    console.log("🚀 ~ file: Table.js ~ line 21 ~ Table ~ event.target.value", results)
   };
 
 
@@ -63,10 +68,11 @@ export default function Table() {
 
   return (
     <MDBContainer>
-
-
-      <MDBInput value={searchTerm} onChange={handleChange} label='Example label' id='form1' type='text' />
-
+      <MDBRow className="d-flex justify-content-end margin-t-100">
+      <MDBCol md="4" sm="10">
+        <MDBInput value={searchTerm} onChange={handleChange} label='Search Bar' id='form1' type='text' />
+        </MDBCol>
+      </MDBRow>
       <div className="table-responsive">
         <MDBTable>
           <MDBTableHead>
