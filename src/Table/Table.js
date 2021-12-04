@@ -18,20 +18,17 @@ export default function Table() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleChange = event => {
-
     if (event.target.value == "") {
       getTodo();
     }
     setSearchTerm(event.target.value);
 
-    const results = todo.filter(todo =>
+    const results = todo.filter((todo) =>
       todo.todoTitle.toLowerCase().includes(searchTerm)
     );
     setTodo(results);
     console.log("🚀 ~ file: Table.js ~ line 21 ~ Table ~ event.target.value", results)
   };
-
-
 
   // All Data Show
   const getTodo = async () => {
@@ -44,7 +41,6 @@ export default function Table() {
         setTodo(response.data);
       });
   };
-
 
   //  Delect post
   const deleteFunc = async (id) => {
@@ -62,15 +58,14 @@ export default function Table() {
   };
 
   useEffect(() => {
-
     getTodo();
   }, []);
 
   return (
     <MDBContainer>
       <MDBRow className="d-flex justify-content-end margin-t-100">
-      <MDBCol md="4" sm="10">
-        <MDBInput value={searchTerm} onChange={handleChange} label='Search Bar' id='form1' type='text' />
+        <MDBCol md="4" sm="10">
+          <MDBInput value={searchTerm} onChange={handleChange} label='Search Bar' id='form1' type='text' />
         </MDBCol>
       </MDBRow>
       <div className="table-responsive">
